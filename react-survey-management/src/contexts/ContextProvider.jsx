@@ -4,7 +4,8 @@ const StateContext = createContext({
     currentUser : {},
     userToken : null,
     setcurrentUser : ()=> {},
-    setUserToken : ()=> {}
+    setUserToken : ()=> {},
+    surveys: []
 
 }); //declear context
 
@@ -185,17 +186,19 @@ export const ContextProvider = ({children})=>{
     }); //declear state to pass into context provider
 
     const [userToken, setUserToken] = useState('aaaa');
+    const [surveys, setSurveys] = useState(tmpSurveys);
     
     return (
         <StateContext.Provider value={{  //context provider
             currentUser,
             setcurrentUser,
             userToken,
-            setUserToken
+            setUserToken,
+            surveys
         }}>
             {children}
         </StateContext.Provider>
     )
 }
 
-export const userStateContext = ()=> useContext(StateContext);
+export const useStateContext = ()=> useContext(StateContext);
