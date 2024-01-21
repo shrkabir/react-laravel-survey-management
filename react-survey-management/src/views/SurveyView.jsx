@@ -1,6 +1,7 @@
 import {useState} from "react";
 import PageComponent from "../components/PageComponent";
 import { PhotoIcon } from "@heroicons/react/24/outline";
+import TButton from "../components/core/TButton";
 
 export default function SurveyView(){
     const [survey, setSurvey] = useState({
@@ -12,6 +13,15 @@ export default function SurveyView(){
         expire_date: "",
         questions:[],
     });
+
+    const onImageChoose = ()=>{
+        console.log("on image change");
+    }
+
+    const onSubmit=(ev)=>{
+        ev.preventDefault();
+        console.log(ev);
+    }
     return (
         <PageComponent title="Create new survey">
             <form action="#" method="POST" onSubmit={onSubmit}>
@@ -36,14 +46,53 @@ export default function SurveyView(){
                             </div>
                         </div>
                         {/* Image */}
+                        {/* Title */}
                         <div className="col-span-6 sm:col-span-3">
                             <label htmlFor="title" className="block text-sm font-medium text-gray-700">
                                 Survey Title
                             </label>
-                            <input type="text" />
+                            <input type="text" name="title" id="title" value={survey.title} onChange={(ev)=>setSurvey({...survey, title:ev.target.value})} placeholder="Survey Title" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
                         </div>
                         {/* Title */}
 
+                        {/* Description */}
+                        <div className="col-span-6 sm:col-span-3">
+                            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                                Description
+                            </label>
+                            <textarea name="description" id="description" value={survey.description} onChange={(ev)=>setSurvey({...survey, description:ev.target.value})} placeholder="Describe your survey" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" cols="30" rows="10"></textarea>
+                        </div>
+                        {/* Description */}
+
+                        {/* Expire Date */}
+                        <div className="col-span-6 sm:col-span-3">
+                            <label htmlFor="expire_date" className="block text-sm font-medium text-gray-700">
+                                Expire Date
+                            </label>
+                            <input type="date" name="expire_date" id="expire_date" value={survey.expire_date} onChange={(ev)=>setSurvey({...survey, expire_date:ev.target.value})} placeholder="Survey Title" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                        </div>
+                        {/* Expire Date */}
+
+                        {/* Active */}
+                        <div className="flex items-start">
+                            <div className="flex h-5 items-center">
+                                <input type="checkbox" name="status" id="status" checked={survey.status} onChange={(ev)=>setSurvey({...survey, status:ev.target.checked})} className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                            </div>
+                            <div className="ml-3 text-sm">
+                                <label htmlFor="comments" className="font-medium text-gray-700">
+                                    Active
+                                </label>
+                                <p className="text-gray-500">
+                                    Whether to make survey publicly available
+                                </p>
+                            </div>
+                        </div>
+                        {/* Active */}
+                    </div>
+                    <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+                        <TButton>
+                            Save
+                        </TButton>
                     </div>
                 </div>
             </form>
