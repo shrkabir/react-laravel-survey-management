@@ -24,7 +24,7 @@ class SignupRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'email' => 'required|email|unique:users, email',
+            'email' => 'required|email|unique:users',
             'password' => ['required', 'confirmed', Password::min(8)->numbers()->symbols()]
         ];
     }

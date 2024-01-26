@@ -1,26 +1,29 @@
-import {Link} from 'react-router-dom';
-import {useState} from 'react';
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import axios from 'axios';
 import axiosClient from '../axios';
+import { useStateContext } from '../contexts/ContextProvider';
 
 export default function Signup() {
+    const { setcurrentUser, setUserToken } = useStateContext();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setCeonfirmPassword] = useState('');
-    const [error, setError] = useState({__html: ""});
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState({ __html: "" });
 
-    const onSubmit = (e)=>{
+    const onSubmit = (e) => {
         e.preventDefault();
-        setError({__html: ""});
+        setError({ __html: "" });
         axiosClient.post('/signup', {
             name: name,
             email,
             password,
-            confirm_password: confirmPassword
-        }).then(({data})=>{
-            console.log(data);
-        }).catch((error)=>{
+            password_confirmation: confirmPassword
+        }).then(({ data }) => {
+            setcurrentUser(data.user);
+            setUserToken(data.token);
+        }).catch((error) => {
             console.log(error);
         });
     }
@@ -42,8 +45,9 @@ export default function Signup() {
                                     id="name"
                                     name="name"
                                     type="text"
-                                    
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    value={name}
+                                    onChange={(ev) => setName(ev.target.value)}
                                     placeholder="Full Name"
                                 />
                             </div>
@@ -57,8 +61,9 @@ export default function Signup() {
                                     id="email"
                                     name="email"
                                     type="email"
-                                    
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    value={email}
+                                    onChange={(ev) => setEmail(ev.target.value)}
                                 />
                             </div>
                         </div>
@@ -75,25 +80,27 @@ export default function Signup() {
                                     name="password"
                                     type="password"
                                     autoComplete="current-password"
-                                    
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    value={password}
+                                    onChange={(ev) => setPassword(ev.target.value)}
                                 />
                             </div>
                         </div>
                         <div>
                             <div className="flex items-center justify-between">
                                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                                   Confirm Password
+                                    Confirm Password
                                 </label>
                             </div>
                             <div className="mt-2">
                                 <input
-                                    id="confirm_password"
-                                    name="confirm_password"
+                                    id="password_confirmation"
+                                    name="password_confirmation"
                                     type="password"
-                                    
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     placeholder="Confirm Password"
+                                    value={confirmPassword}
+                                    onChange={(ev) => setConfirmPassword(ev.target.value)}
                                 />
                             </div>
                         </div>
