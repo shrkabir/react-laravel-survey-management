@@ -2,25 +2,61 @@ import {useState} from "react";
 import PageComponent from "../components/PageComponent";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 import TButton from "../components/core/TButton";
+import axiosClient from '../axios.js';
+import { useNavigate } from "react-router-dom";
 
 export default function SurveyView(){
+    const navigate= useNavigate();
     const [survey, setSurvey] = useState({
         title: "",
         slug: "",
         status: false,
         description: "",
         image: null,
+        image_url: null,
         expire_date: "",
         questions:[],
     });
 
-    const onImageChoose = ()=>{
-        console.log("on image change");
+    const onImageChoose = (ev)=>{
+        const file= ev.target.files[0];
+
+        console.log(file);
+        const reader= new FileReader();
+        reader.onload= ()=>{
+            setSurvey({
+                ...survey,
+                image: file,
+                image_url: reader.result
+            })
+
+            ev.target.value= "";
+        }
+        reader.readAsDataURL(file);
+
+        console.log(reader.result);
     }
 
     const onSubmit=(ev)=>{
         ev.preventDefault();
-        console.log(ev);
+        // axiosClient.post('survey', {
+        //     title: 'Lorem',
+        //     description: 'TEst',
+        //     expire_date: '2024-08-06',
+        //     status: true,
+        //     questions:[]
+        // });
+
+        const payload= {...survey};
+        if(payload.image){
+            payload.image= payload.image_url;
+        }
+
+        delete payload.image_url;
+        axiosClient.post('/survey', payload).then((res)=>{
+            console.log(res);
+            navigate('/surveys');
+        })
     }
     return (
         <PageComponent title="Create new survey">
@@ -32,7 +68,7 @@ export default function SurveyView(){
                             <label className="block text-sm font-medium text-gray-700">Photo</label>
                             <div className="mt-1 flex items-center">
                                 {survey.image_url && (
-                                    <img src="survey.image_url" alt="" className="w-32 h-32 object-cover" />
+                                    <img src={survey.image_url} alt="" className="w-32 h-32 object-cover" />
                                 )}
                                 {!survey.image_url && (
                                     <span className="flex justify-center items-center text-gray-400 h-12 w-12 overflow-hidden rounded-full bg-gray-100">

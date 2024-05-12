@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreSurveyRequest extends FormRequest
@@ -11,8 +12,15 @@ class StoreSurveyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
+
+    // protected function prepareForValidation()
+    // {
+    //     $this->merge([
+    //         'user_id' => 1
+    //     ]);
+    // }
 
     /**
      * Get the validation rules that apply to the request.
@@ -22,7 +30,13 @@ class StoreSurveyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' =>'required|string|max:1000',
+            'image' => 'nullable|string',
+            'user_id'=> 'exists:users, id',
+            'status' => 'required|boolean',
+            'description' => 'nullable|string',
+            'expire_date' => 'nullable|date|after:today',
+            'questions' => 'array',
         ];
     }
 }

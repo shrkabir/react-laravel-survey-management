@@ -31,8 +31,9 @@ class AuthController extends Controller
     public function login(LoginRequest $request){
         $credentials= $request->validated();
         $remember= $credentials['remember'] ?? false;
+        // dd(Auth::attempt($credentials, $remember));
 
-        if(!Auth::check($credentials, $remember)){
+        if(!Auth::attempt($credentials, $remember)){
             return response([
                 'error' => 'The provided credentials are not correct.'
             ], 422);
