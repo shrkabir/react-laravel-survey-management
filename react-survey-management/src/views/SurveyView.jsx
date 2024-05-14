@@ -18,6 +18,8 @@ export default function SurveyView(){
         questions:[],
     });
 
+    const [errors, setErrors] = useState('');
+
     const onImageChoose = (ev)=>{
         const file= ev.target.files[0];
 
@@ -53,16 +55,28 @@ export default function SurveyView(){
         }
 
         delete payload.image_url;
-        axiosClient.post('/survey', payload).then((res)=>{
-            console.log(res);
-            navigate('/surveys');
-        })
+        axiosClient.post('/survey', payload)
+            .then((res)=>{
+                console.log(res);
+                navigate('/surveys');
+            })
+            .catch((err)=>{
+                if(err && err.response){
+                    setErrors(err.response.data.message)
+                }
+            })
     }
     return (
         <PageComponent title="Create new survey">
             <form action="#" method="POST" onSubmit={onSubmit}>
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                    {errors && (
+                       <div className="bg-red-500 text-white py-2 px-3 rounded-lg">
+                            {errors}
+                       </div> 
+                    )}
+                    
                         {/* Image */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Photo</label>
