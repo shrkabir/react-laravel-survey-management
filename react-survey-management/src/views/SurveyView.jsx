@@ -4,6 +4,7 @@ import { PhotoIcon } from "@heroicons/react/24/outline";
 import TButton from "../components/core/TButton";
 import axiosClient from '../axios.js';
 import { useNavigate } from "react-router-dom";
+import SurveyQuestions from "../components/SurveyQuestions.jsx";
 
 export default function SurveyView(){
     const navigate= useNavigate();
@@ -65,6 +66,10 @@ export default function SurveyView(){
                     setErrors(err.response.data.message)
                 }
             })
+    }
+
+    function onSurveyUpdate(survey){
+        setSurvey({...survey})
     }
     return (
         <PageComponent title="Create new survey">
@@ -138,6 +143,7 @@ export default function SurveyView(){
                             </div>
                         </div>
                         {/* Active */}
+                        <SurveyQuestions survey={survey} onSurveyUpdate={onSurveyUpdate}/>
                     </div>
                     <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
                         <TButton>
